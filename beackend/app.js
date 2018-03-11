@@ -1,19 +1,41 @@
-var express = require('express');
-var app = express();
-var socket = require('socket.io');
+const express = require('express');
+const app = express();
+const socket = require('socket.io');
+const bodyParser = require('body-parser');
+const mongo = require('mongodb');
+const monk = require('monk');
+const db = monk('mongodb://root:root@ds161136.mlab.com:61136/mydb');
+const log4js = require('log4js');
 
 
-var server = app.listen(8080, function () {
-    console.log('server is running on port 8080');
+
+app.use(bodyParser.json);
+
+
+// Log4js
+let logger = log4js.getLogger();
+logger.level = 'error';
+logger.level = 'info';
+
+// MongoDB
+
+app.use(function (req, res, next) {
+    req.db = db;
+    next();
 });
 
-var io = socket(server);
+const server = app.listen(8080, function () {
+    logger.info('server is running on port 8080');
+});
+
+const io = socket(server);
 io.on('connection', (socket) => {
-    console.log(socket.id);
+    logger.info(socket.id);
 
     socket.on('SEND_MESSAGE', function (data) {
         console.log(data);
+        let mess = db.get('mess');
+        mess.insert(data);
         io.emit('RECEIVE_MESSAGE', data);
     })
 });
-

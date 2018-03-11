@@ -3,8 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.2",
     "classnames": "^2.2.5",
     "express": "^4.16.2",
+    "log4js": "^2.5.3",
+    "mongodb": "^3.0.4",
+    "monk": "^6.0.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "1.1.1",
